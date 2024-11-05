@@ -1,10 +1,10 @@
 ---
 title: "Análise Exploratória de Dados - High School and Beyond"
 author: "João Pedro Albino"
-date: "`r Sys.Date()`"
+date: "`r format(Sys.Date(), '%d/%m/%Y')`"
 output:
-  word_document: default
   html_document: default
+  word_document: default
   pdf_document: default
 subtitle: "Exercício-exemplo e solução via Chat-GPT 4o"
 ---
