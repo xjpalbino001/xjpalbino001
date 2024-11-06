@@ -1,0 +1,528 @@
+---
+title: "Análise de Dados do Arquivo hsb2f.csv"
+author: "João Pedro Albino"
+date: "`r format(Sys.Date(), '%d/%m/%Y')`"
+output:
+  word_document: default
+  html_document: default
+  pdf_document: default
+subtitle: Usando o Perplexity IA
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = F, error = F, warning = F)
+```
+
+## Questão inicial  
+**Escrever um programa em linguagem R que leia o arquivo `hsb2f.csv`, realize uma Análise Exploratória de Dados e mostre o código.**
+
+**Resposta:**
+Para realizar uma Análise Exploratória de Dados (AED) no arquivo hsb2f.csv, você pode utilizar a linguagem R.  
+Abaixo está um exemplo de código que lê o arquivo, realiza algumas análises descritivas e visualizações básicas.
+
+## Introdução
+
+Neste documento, realizaremos uma análise exploratória dos dados contidos no arquivo `hsb2f.csv`.
+O objetivo é investigar as notas de matemática dos estudantes em diferentes grupos demográficos.
+
+## Carregando Pacotes Necessários
+
+```{r load-packages}
+# Carregar pacotes necessários
+library(tidyverse)  # Para manipulação de dados e visualização
+library(ggplot2)    # Para gráficos
+
+```
+
+## Carregando os Dados
+```{r load-data}
+# Carregar os dados do arquivo csv
+file_path <- "../dados/hsb2f.csv" # Caminho correto
+data <- read.csv(file_path, sep = ";")
+```
+
+## Estrutura dos Dados  
+### Verificar as primeiras linhas do dataset  
+
+```{r first-lines}
+# Verificar as primeiras linhas do dataset
+head(data)
+```
+
+### Resumo estatístico dos dados
+
+```{r summary}
+summary(data)
+```
+
+
+### Estrutura dos dados  
+```{r structure}
+str(data)
+```
+
+## Análise das Variáveis Categóricas  
+
+### 1. Gênero  
+#### Gráfico de barras para a variável gênero  
+
+```{r categ-genero}
+
+ggplot(data, aes(x = genero)) +
+  geom_bar(fill = "steelblue") +
+  labs(title = "Distribuição de Gênero dos Estudantes",
+       x = "Gênero",
+       y = "Frequência") +
+  theme_minimal()
+```
+
+### 2. Raça  
+#### Gráfico de barras para a variável raça  
+
+```{r categ-raca}
+ggplot(data, aes(x = raca)) +
+  geom_bar(fill = "lightgreen") +
+  labs(title = "Distribuição da Raça dos Estudantes",
+       x = "Raça",
+       y = "Frequência") +
+  theme_minimal()
+``` 
+
+### 3. Classe Social  
+#### Gráfico de barras para a variável classe social  
+```{r categ-casse}
+ggplot(data, aes(x = clasocial)) +
+  geom_bar(fill = "salmon") +
+  labs(title = "Distribuição da Classe Social dos Estudantes",
+       x = "Classe Social",
+       y = "Frequência") +
+  theme_minimal()
+``` 
+
+### 4. Tipo de Escola  
+#### Gráfico de barras para a variável tipo de escola  
+
+```{r categ-escola}
+ggplot(data, aes(x = tipescola)) +
+  geom_bar(fill = "orange") +
+  labs(title = "Distribuição do Tipo de Escola dos Estudantes",
+       x = "Tipo de Escola",
+       y = "Frequência") +
+  theme_minimal()
+```
+
+### Conclusão Preliminar da Análise Descritiva  
+Os gráficos anteriores mostram a distribuição das variáveis categóricas no dataset `hsb2f.csv`.  Essas visualizações ajudam a entender melhor o perfil dos estudantes em relação ao gênero, raça, classe social e tipo de escola.
+
+
+**Prompt:** Realizar uma análise mais profunda dessas variáveis categóricas. Quais `insights` poderiam ser observados?  
+
+*Resposta:*  
+Para realizar uma análise mais aprofundada das variáveis categóricas do dataset hsb2f.csv, podemos explorar como essas variáveis se relacionam com o desempenho acadêmico dos estudantes, especialmente nas notas de matemática.  
+A seguir, apresento alguns insights que podem ser observados a partir da análise das variáveis categóricas, como gênero, raça, classe social e tipo de escola.  
+
+#### 1. **Gênero**
+   - **Análise:**
+     - Comparar as médias das notas de matemática entre meninos e meninas pode revelar se existe uma diferença significativa no desempenho acadêmico entre os gêneros.
+     - Gráficos de barras ou boxplots podem ser utilizados para visualizar essas diferenças.
+   - **Insight:**
+     - Se as meninas apresentarem notas consistentemente mais altas do que os meninos, isso pode indicar um desempenho acadêmico superior em determinadas disciplinas, o que pode ser explorado para entender fatores como motivação e apoio educacional.  
+     
+#### 2. **Raça**
+   - **Análise:**
+     - Analisar as médias das notas de matemática por raça (branca, afro-americana, hispânica, asiática) pode evidenciar disparidades raciais no desempenho acadêmico.
+     - Utilizar gráficos de barras ou gráficos de violino para visualizar a distribuição das notas por raça.
+   - **Insight:**
+     - Se os estudantes brancos tiverem notas significativamente mais altas do que os estudantes afro-americanos e hispânicos, isso pode indicar desigualdades no acesso a recursos educacionais e suporte acadêmico. Essa informação é crucial para desenvolver políticas educacionais que visem reduzir essas disparidades.
+     
+#### 3. Classe Social
+   - **Análise:**
+     - Comparar as notas de matemática entre diferentes classes sociais (baixa, média, alta) pode mostrar como a classe social impacta o desempenho acadêmico.
+     - Gráficos de barras ou boxplots podem ser usados para visualizar as diferenças nas médias.
+   - **Insight:**
+     - Se os alunos de classe alta apresentarem notas muito superiores aos de classe baixa, isso pode sugerir que fatores socioeconômicos influenciam diretamente o desempenho escolar. Intervenções direcionadas podem ser necessárias para apoiar estudantes de classes sociais mais baixas.
+     
+#### 4. Tipo de Escola
+   - **Análise:**
+     - Comparar as médias das notas de matemática entre alunos de escolas públicas e privadas pode ajudar a entender o impacto do tipo de escola no desempenho acadêmico.
+     - Gráficos comparativos podem ser utilizados para visualizar essas diferenças.
+   - **Insight:**
+     - Se os alunos em escolas privadas apresentarem notas significativamente mais altas do que os alunos em escolas públicas, isso pode indicar que escolas privadas oferecem melhores recursos educacionais ou ambientes de aprendizagem. Essa informação pode ser utilizada para justificar investimentos em infraestrutura e recursos nas escolas públicas.
+     
+#### 5. Interações entre Variáveis
+   - **Análise Avançada:**
+     - Explorar interações entre gênero, raça e classe social em relação às notas de matemática pode revelar padrões mais complexos.
+     - Usar modelos estatísticos ou gráficos multifacetados (como facetas) para investigar como essas variáveis interagem entre si.
+   - **Insight:**
+     - Por exemplo, se meninas brancas de classe alta têm notas significativamente melhores do que meninos afro-americanos de classe baixa, isso destaca a necessidade de abordagens diferenciadas para atender às necessidades específicas dos diferentes grupos demográficos.
+
+### Conclusão Preliminar  
+A análise das variáveis categóricas no dataset hsb2f.csv pode fornecer insights valiosos sobre o desempenho acadêmico dos estudantes.  
+Identificar disparidades e padrões nas notas de matemática em relação ao gênero, raça, classe social e tipo de escola é fundamental para desenvolver estratégias educacionais eficazes e promover a equidade no acesso à educação.  
+Essas análises devem ser acompanhadas por intervenções práticas que visem melhorar o suporte a grupos sub-representados ou em desvantagem.
+
+**Prompt:** Realize essas análises utilizando a linguagem R.
+
+**Resposta:** Para realizar uma análise mais profunda das variáveis categóricas do dataset `hsb2f.csv` utilizando a linguagem R, você pode seguir o passo a passo especificado.  
+Esta análise incluirá a leitura dos dados, a exploração das variáveis categóricas e a visualização dos resultados.  
+
+#### Passo a Passo em R
+   - Carregar os Pacotes Necessários: Instale e carregue os pacotes dplyr e ggplot2 para manipulação de dados e visualização.
+   - Ler o Dataset: Carregue o arquivo CSV.
+   - Explorar as Variáveis Categóricas: Crie gráficos para visualizar a distribuição das variáveis categóricas, como gênero, raça, classe social e tipo de escola.
+   - Analisar as Médias: Calcule as médias das notas de matemática para cada grupo categórico.
+   - Visualizar as Médias: Use gráficos para mostrar as médias das notas de matemática em relação às variáveis categóricas.
+
+### Código em R
+   - Carregar os Pacotes Necessários, Ler o Dataset, Verificar as primeiras linhas do dataset (vide acima); 
+   
+#### Análise das variáveis categóricas  
+##### 1. Gênero  
+```{r analise-genero}
+ggplot(data, aes(x = genero)) +
+  geom_bar(fill = "steelblue") +
+  labs(title = "Distribuição de Gênero dos Estudantes",
+       x = "Gênero",
+       y = "Frequência") +
+  theme_minimal()
+``` 
+
+##### 2. Raça  
+```{r analise-raca}
+ggplot(data, aes(x = raca)) +
+  geom_bar(fill = "lightgreen") +
+  labs(title = "Distribuição da Raça dos Estudantes",
+       x = "Raça",
+       y = "Frequência") +
+  theme_minimal()
+```
+
+##### 3. Classe Social  
+```{r analise-classe}
+ggplot(data, aes(x = clasocial)) +
+  geom_bar(fill = "salmon") +
+  labs(title = "Distribuição da Classe Social dos Estudantes",
+       x = "Classe Social",
+       y = "Frequência") +
+  theme_minimal()
+```
+
+##### 4. Tipo de Escola  
+```{r analise-escola}
+ggplot(data, aes(x = tipescola)) +
+  geom_bar(fill = "orange") +
+  labs(title = "Distribuição do Tipo de Escola dos Estudantes",
+       x = "Tipo de Escola",
+       y = "Frequência") +
+  theme_minimal()
+```
+
+#### Análise das médias das notas de matemática  
+##### Médias por Gênero  
+```{r analise-medias-genero}
+media_genero <- data %>%
+  group_by(genero) %>%
+  summarise(media_matematica = mean(matematica, na.rm = TRUE))
+print(media_genero)
+```
+
+##### Médias por Raça    
+```{r analise-medias-raca}
+media_raca <- data %>%
+  group_by(raca) %>%
+  summarise(media_matematica = mean(matematica, na.rm = TRUE))
+
+print(media_raca)
+```
+
+##### Médias por Classe Social    
+```{r analise-medias-classe}
+media_clasocial <- data %>%
+  group_by(clasocial) %>%
+  summarise(media_matematica = mean(matematica, na.rm = TRUE))
+
+print(media_clasocial)
+```
+
+##### Médias por Tipo de Escola    
+```{r analise-medias-escola}
+media_tipescola <- data %>%
+  group_by(tipescola) %>%
+  summarise(media_matematica = mean(matematica, na.rm = TRUE))
+
+print(media_tipescola)
+```
+
+#### Visualização das médias  
+##### Gráfico das médias por gênero  
+```{r graficos-medias-genero}
+ggplot(media_genero, aes(x = genero, y = media_matematica, fill = genero)) +
+  geom_bar(stat="identity") +
+  labs(title = "Média de Matemática por Gênero",
+       x = "Gênero",
+       y = "Média de Matemática") +
+  theme_minimal()
+```
+
+##### Gráfico das médias por raça    
+```{r graficos-medias-raca}
+ggplot(media_raca, aes(x = raca, y = media_matematica, fill = raca)) +
+  geom_bar(stat="identity") +
+  labs(title = "Média de Matemática por Raça",
+       x = "Raça",
+       y = "Média de Matemática") +
+  theme_minimal()
+```
+
+##### Gráfico das médias por classe social    
+```{r graficos-medias-classe}
+ggplot(media_clasocial, aes(x = clasocial, y = media_matematica, fill = clasocial)) +
+  geom_bar(stat="identity") +
+  labs(title = "Média de Matemática por Classe Social",
+       x = "Classe Social",
+       y = "Média de Matemática") +
+  theme_minimal()
+```
+
+##### Gráfico das médias por tipo de escola    
+```{r graficos-medias-escola}
+ggplot(media_tipescola, aes(x = tipescola, y = media_matematica, fill = tipescola)) +
+  geom_bar(stat="identity") +
+  labs(title = "Média de Matemática por Tipo de Escola",
+       x = "Tipo de Escola",
+       y = "Média de Matemática") +
+  theme_minimal()
+```
+
+**Prompt:** Realizar uma análise mais aprofundada das variáveis categóricas. 
+  - Quais insights poderiam ser observados ?  
+**Resposta:**  
+Para realizar uma análise mais aprofundada das variáveis categóricas do dataset `hsb2f.csv`, podemos explorar como essas variáveis se relacionam com o desempenho acadêmico dos estudantes, especialmente nas notas de matemática.  
+A seguir, sâo apresentadas alguns *insights* que podem ser observados a partir da análise das variáveis categóricas, como `genero`, `raca`, `clasocial` e `tipescola`.
+
+#### 1. Variável `genero`
+  - **Análise**:
+   - Comparar as médias das notas de matemática entre meninos e meninas pode revelar se existe uma diferença significativa no desempenho acadêmico entre os gêneros.
+    - Gráficos de barras ou boxplots podem ser utilizados para visualizar essas diferenças.
+  - **Insight**:
+    - Se as meninas apresentarem notas consistentemente mais altas do que os meninos, isso pode indicar um desempenho acadêmico superior em determinadas disciplinas, o que pode ser explorado para entender fatores como motivação e apoio educacional.
+
+#### 2. Variável `raca`
+  - **Análise**:
+    - Analisar as médias das notas de matemática por raça (branca, afro-americana, hispânica, asiática) pode evidenciar disparidades raciais no desempenho acadêmico.
+    - Utilizar gráficos de barras ou gráficos de violino para visualizar a distribuição das notas por raça.
+  - **Insight**:
+    - Se os estudantes brancos tiverem notas significativamente mais altas do que os estudantes afro-americanos e hispânicos, isso pode indicar desigualdades no acesso a recursos educacionais e suporte acadêmico.
+      Essa informação é crucial para o desenvolvimento de políticas educacionais que visem a reduzir essas disparidades.
+
+#### 3. Variável `clasocial`
+  - **Análise**:
+    - Comparar as notas de matemática entre diferentes classes sociais (baixa, média, alta) pode mostrar como pertencer a determinada classe social pode impactar o desempenho acadêmico do aluno.
+    - Gráficos de barras ou boxplots podem ser usados para visualizar as diferenças nas médias.
+  - **Insight**:
+    - Se os alunos de classe alta apresentarem notas muito superiores aos de classe baixa, isso pode sugerir que fatores socioeconômicos influenciam diretamente no desempenho escolar.  
+    Intervenções direcionadas podem ser necessárias para apoiar estudantes de classes sociais mais baixas.
+
+#### 4. Variável `tipescola`
+  - **Análise**:
+    - Comparar as médias das notas de matemática entre alunos de escolas públicas e privadas pode ajudar a entender o impacto do tipo de escola no desempenho acadêmico.
+    - Gráficos comparativos podem ser utilizados para visualizar essas diferenças.
+  - **Insight**:
+    - Se os alunos em escolas privadas apresentarem notas significativamente mais altas do que os alunos em escolas públicas, isso pode indicar que escolas privadas oferecem melhores recursos educacionais ou ambientes de aprendizagem.  
+    Essa informação pode ser utilizada para justificar maiores investimentos em infraestrutura e recursos nas escolas públicas.
+
+#### 5. Interações entre Variáveis
+  - **Análise Avançada**:
+    - Explorar interações entre gênero, raça e classe social em relação às notas de matemática pode revelar padrões mais complexos.
+    - Usar modelos estatísticos ou gráficos multifacetados (como facetas) para investigar como essas variáveis interagem entre si.
+  - **Insight**:
+    - Por exemplo, se meninas brancas de classe alta têm notas significativamente melhores do que meninos afro-americanos de classe baixa, isso destaca a necessidade de abordagens diferenciadas para atender às necessidades específicas dos diferentes grupos demográficos.
+
+### Conclusões Preliminares
+
+Uma análise mais aprofundada das variáveis categóricas no dataset `hsb2f.csv` pode fornecer insights valiosos sobre o desempenho acadêmico dos estudantes.  
+Identificar disparidades e padrões nas notas de matemática em relação ao gênero, raça, classe social e tipo de escola é fundamental para desenvolver estratégias educacionais eficazes e promover a equidade no acesso à educação. Essas análises devem ser acompanhadas por intervenções práticas que visem melhorar o suporte a grupos sub-representados ou em desvantagem.
+
+Citações:
+[1] https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/40230285/4d49680b-dc42-4851-8c38-40d818b1839b/hsb2f.csv
+
+*Prompt:* Realize essas análises utilizando a linguagem R.  
+*Resposta:* Para realizar uma análise mais detalhada das variáveis categóricas do dataset `hsb2f.csv` utilizando a linguagem R, pode-se seguir o passo a passo sugerido abaixo.  
+A análise incluirá a leitura dos dados, a exploração das variáveis categóricas e a visualização dos resultados.
+
+### Passo a Passo em R
+
+1. **Carregar os Pacotes Necessários**: Instale e carregue os pacotes `dplyr` e `ggplot2` para manipulação de dados e visualização.
+
+2. **Ler o Dataset**: Carregue o arquivo CSV.
+
+3. **Explorar as Variáveis Categóricas**: Crie gráficos para visualizar a distribuição das variáveis categóricas, como gênero, raça, classe social e tipo de escola.
+
+4. **Analisar as Médias**: Calcule as médias das notas de matemática para cada grupo categórico.
+
+5. **Visualizar as Médias**: Use gráficos para mostrar as médias das notas de matemática em relação às variáveis categóricas.
+
+### Código em R  
+
+  - As etapas Carregar pacotes necessários, Ler o arquivo CSV e Verificar as primeiras linhas do dataset já foram executadas acima!
+
+### Análise das variáveis categóricas
+
+#### 1. Gênero  
+##### Distribuição de gênero dos estudantes  
+
+```{r analise2-genero}
+ggplot(data, aes(x = genero)) +
+  geom_bar(fill = "steelblue") +
+  labs(title = "Distribuição de Gênero dos Estudantes",
+       x = "Gênero",
+       y = "Frequência") +
+  theme_minimal()
+``` 
+
+#### 2. Raça  
+##### Distribuição racial dos estudantes  
+
+```{r analise2-racial}
+ggplot(data, aes(x = raca)) +
+  geom_bar(fill = "lightgreen") +
+  labs(title = "Distribuição da Raça dos Estudantes",
+       x = "Raça",
+       y = "Frequência") +
+  theme_minimal()
+```
+
+#### 3. Classe Social  
+##### Distribuição do nível social dos estudantes  
+
+```{r analise2-social}
+ggplot(data, aes(x = clasocial)) +
+  geom_bar(fill = "salmon") +
+  labs(title = "Distribuição da Classe Social dos Estudantes",
+       x = "Classe Social",
+       y = "Frequência") +
+  theme_minimal()
+```
+
+
+#### 4. Tipo de Escola  
+##### Distribuição do tipo de escola  
+
+```{r analise2-tipescola}
+ggplot(data, aes(x = tipescola)) +
+  geom_bar(fill = "orange") +
+  labs(title = "Distribuição do Tipo de Escola dos Estudantes",
+       x = "Tipo de Escola",
+       y = "Frequência") +
+  theme_minimal()
+```
+
+### Análise das médias das notas de matemática  
+#### Calculando as médias das notas de matemática para cada grupo categórico.
+
+##### Médias por Gênero
+
+```{r analise-media-genero}
+media_genero <- data %>%
+  group_by(genero) %>%
+  summarise(media_matematica = mean(matematica, na.rm = TRUE))
+print(media_genero)
+```
+
+##### Médias por Raça  
+
+```{r analise-media-raca}
+media_raca <- data %>%
+  group_by(raca) %>%
+  summarise(media_matematica = mean(matematica, na.rm = TRUE))
+print(media_raca)
+``` 
+
+##### Médias por Classe Social  
+
+```{r analise-media-social}
+media_clasocial <- data %>%
+  group_by(clasocial) %>%
+  summarise(media_matematica = mean(matematica, na.rm = TRUE))
+print(media_clasocial)
+```
+
+## Médias por Tipo de Escola  
+
+```{r analise-media-tipescola}
+media_tipescola <- data %>%
+  group_by(tipescola) %>%
+  summarise(media_matematica = mean(matematica, na.rm = TRUE))
+print(media_tipescola)
+```
+
+### Visualizando as médias
+
+#### Gráfico das médias por gênero  
+
+```{r visual-media-genero}
+ggplot(media_genero, aes(x = genero, y = media_matematica, fill = genero)) +
+  geom_bar(stat="identity") +
+  labs(title = "Média em Matemática por Gênero",
+       x = "Gênero",
+       y = "Média de Matemática") +
+  theme_minimal()
+```
+
+#### Gráfico das médias por raça  
+
+```{r visual-media-raca}
+ggplot(media_raca, aes(x = raca, y = media_matematica, fill = raca)) +
+  geom_bar(stat="identity") +
+  labs(title = "Média em Matemática por Raça",
+       x = "Raça",
+       y = "Média de Matemática") +
+  theme_minimal()
+```
+
+#### Gráfico das médias por classe social
+
+```{r visual-media-social}
+ggplot(media_clasocial, aes(x = clasocial, y = media_matematica, fill = clasocial)) +
+  geom_bar(stat="identity") +
+  labs(title = "Média em Matemática por Classe Social",
+       x = "Classe Social",
+       y = "Média de Matemática") +
+  theme_minimal()
+```
+
+
+#### Gráfico das médias por tipo de escola
+
+```{r visual-media-escola}
+ggplot(media_tipescola, aes(x = tipescola, y = media_matematica, fill = tipescola)) +
+  geom_bar(stat="identity") +
+  labs(title = "Média em Matemática por Tipo de Escola",
+       x = "Tipo de Escola",
+       y = "Média de Matemática") +
+  theme_minimal()
+```
+
+### Análise e Insights
+
+1. **Distribuição do Gênero**:
+   - O gráfico mostrará quantos alunos são do gênero masculino e feminino. Uma distribuição equilibrada pode indicar que ambos os gêneros têm igual acesso à educação.
+
+2. **Distribuição da Raça**:
+   - A distribuição racial pode revelar se há diversidade entre os estudantes. Uma predominância de um grupo racial pode indicar desigualdade no acesso à educação.
+
+3. **Classe Social**:
+   - A análise da classe social pode mostrar se há uma concentração significativa de alunos em classes sociais baixas ou altas e como isso pode afetar o desempenho acadêmico.
+
+4. **Tipo de Escola**:
+   - Comparar escolas públicas e privadas pode revelar diferenças no desempenho acadêmico com base no tipo de instituição.
+
+5. **Médias das Notas**:
+   - As médias calculadas para cada variável categórica ajudarão a identificar quais grupos estão se saindo melhor ou pior nas notas de matemática.
+   - Se um grupo (por exemplo, estudantes brancos ou estudantes de classe alta) tiver notas significativamente mais altas do que outros grupos (como estudantes afro-americanos ou hispânicos), isso pode indicar disparidades que precisam ser abordadas.
+
+Esses insights podem ser usados para desenvolver estratégias educacionais que visem melhorar o desempenho acadêmico em grupos que apresentam desvantagens ou desigualdades no acesso à educação.
+
+Citação:
+[1] https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/40230285/4d49680b-dc42-4851-8c38-40d818b1839b/hsb2f.csv
+
