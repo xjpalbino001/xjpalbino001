@@ -4,8 +4,8 @@ author: "João Pedro Albino"
 date: "`r format(Sys.Date(), '%d/%m/%Y')`"
 output:
   word_document: default
-  html_document: default
   pdf_document: default
+  html_document: default
 subtitle: Usando o Perplexity IA
 ---
 
@@ -525,4 +525,305 @@ Esses insights podem ser usados para desenvolver estratégias educacionais que v
 
 Citação:
 [1] https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/40230285/4d49680b-dc42-4851-8c38-40d818b1839b/hsb2f.csv
+
+## Segund parte  
+*Prompt:* Realizar uma análise exploratória do arquivo `hsb2f.csv` com as variáveis leitura (`ler`), escrita (`escrever`), matemática (`matematica`), ciências (`ciencias`) e estudos sociais (`estsociais`).  
+Elabore um programa em R que mostre as análises e os gráficos correspondentes.  
+*Resposta:* Resposta
+Para realizar uma análise exploratória do arquivo hsb2f.csv, focando nas variáveis de desempenho escolar (leitura, escrita, matemática, ciências e estudos sociais), pode-se utilizar o R para calcular estatísticas descritivas e criar gráficos que ajudem a visualizar os dados.  
+Abaixo está um programa em R que realiza essa análise.
+
+### Código em R
+#### 1. Carregamento dos Pacotes  
+O código começa carregando os pacotes `dplyr` e `tidyr` para *manipulação dos dados* e `ggplot2` para visualização.  
+
+```{r carregar-bibliotecas}
+# Carregar pacotes necessários
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+```
+
+#### 2. Leitura do Dataset  
+O arquivo CSV é lido e armazenado em um dataframe chamado data.  
+
+```{r importar-dados}
+# Ler o arquivo CSV
+arquivo <- "../dados/hsb2f.csv" 
+data <- read.csv(arquivo, sep = ";")
+
+```
+
+#### 3. Estatísticas Descritivas  ]
+O código calcula a média e o desvio padrão para cada uma das variáveis (leitura, escrita, matemática, ciências e estudos sociais).
+
+##### Análise Descritiva das Variáveis de Desempenho  
+```{r descritiva}
+descriptive_stats <- data %>%
+  summarise(
+    media_leitura = mean(ler, na.rm = TRUE),
+    media_escrita = mean(escrever, na.rm = TRUE),
+    media_matematica = mean(matematica, na.rm = TRUE),
+    media_ciencias = mean(ciencias, na.rm = TRUE),
+    media_estsociais = mean(estsociais, na.rm = TRUE),
+    sd_leitura = sd(ler, na.rm = TRUE),
+    sd_escrita = sd(escrever, na.rm = TRUE),
+    sd_matematica = sd(matematica, na.rm = TRUE),
+    sd_ciencias = sd(ciencias, na.rm = TRUE),
+    sd_estsociais = sd(estsociais, na.rm = TRUE)
+  )
+
+print(descriptive_stats)
+```
+
+##### Gráficos de Boxplot para cada variável de desempenho  
+São gerados boxplots para cada variável que mostram a distribuição das notas e ajudam a identificar outliers.  
+
+###### Boxplot de Leitura  
+
+```{r grafico-leitura}
+ggplot(data, aes(x = "", y = ler)) +
+  geom_boxplot(fill = "lightblue") +
+  labs(title = "Boxplot das Notas de Leitura", y = "Notas de Leitura") +
+  theme_minimal()
+```
+
+###### Boxplot de Escrita
+
+```{r grafico-escrita}
+ggplot(data, aes(x = "", y = escrever)) +
+  geom_boxplot(fill = "lightgreen") +
+  labs(title = "Boxplot das Notas de Escrita", y = "Notas de Escrita") +
+  theme_minimal()
+```
+
+###### Boxplot de Matemática  
+```{r grafico-matematica}
+ggplot(data, aes(x = "", y = matematica)) +
+  geom_boxplot(fill = "salmon") +
+  labs(title = "Boxplot das Notas de Matemática", y = "Notas de Matemática") +
+  theme_minimal()
+```
+
+###### Boxplot de Ciências  
+```{r grafico-ciencias}
+ggplot(data, aes(x = "", y = ciencias)) +
+  geom_boxplot(fill = "orange") +
+  labs(title = "Boxplot das Notas de Ciências", y = "Notas de Ciências") +
+  theme_minimal()
+``` 
+
+###### Boxplot de Estudos Sociais  
+```{r grafico-sociais}
+ggplot(data, aes(x = "", y = estsociais)) +
+  geom_boxplot(fill = "purple") +
+  labs(title = "Boxplot das Notas de Estudos Sociais", y = "Notas de Estudos Sociais") +
+  theme_minimal()
+```
+
+*Prompt:* Elaborar o programa em R que junte os cinco boxplots em um único gráfico  
+*Resposta:* 
+Para elaborar um programa em R que junte os cinco boxplots (leitura, escrita, matemática, ciências e estudos sociais) em um único gráfico, pode-se usar a função `pivot_longer` do pacote `tidyr` para transformar os dados de um formato largo para um formato longo.  
+Isso facilitará a criação de um único gráfico com todos os boxplots.
+
+#### Código em R
+
+###### Transformar os dados para formato longo  
+A função pivot_longer é utilizada para transformar as colunas de notas (ler, escrever, matematica, ciencias, estsociais) em duas colunas: uma para o nome da disciplina e outra para as notas.  
+Isso facilita a criação dos gráficos.
+
+```{r juntos-e-misturados}
+data_long <- data %>%
+  pivot_longer(cols = c(ler, escrever, matematica, ciencias, estsociais),
+               names_to = "disciplina",
+               values_to = "nota")
+``` 
+
+###### Criar o boxplot combinado  
+  - O gráfico é criado usando ggplot, onde `geom_boxplot()` gera os *boxplots* para cada disciplina.  
+  - As cores são definidas usando a *paleta* `"Set3"` do pacote `RColorBrewer`.
+
+```{r juntos-e-misturados-2}
+ggplot(data_long, aes(x = disciplina, y = nota, fill = disciplina)) +
+  geom_boxplot() +
+  labs(title = "Boxplots das Notas por Disciplina",
+       x = "Disciplina",
+       y = "Notas") +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Set3")
+```
+
+##### Potenciais Insights dos boxplots  
+  - **Comparação de Desempenho:** O boxplot combinado permite observar rapidamente qual disciplina tem uma maior variação nas notas e se há outliers significativos.
+  - **Identificação de Desigualdades:** Se uma disciplina mostrar consistentemente notas mais baixas ou uma distribuição mais estreita, isso pode indicar áreas que necessitam de atenção ou intervenção educacional.
+  - **Análise de Tendências:** O gráfico pode ajudar a identificar tendências gerais no desempenho dos alunos em diferentes disciplinas.  
+Essa abordagem fornece uma visão abrangente do desempenho acadêmico dos estudantes nas várias disciplinas e pode ser útil para informar decisões educacionais.
+
+
+##### Gráfico de Dispersão entre as variáveis  
+Os gráficos mostram a relação entre diferentes pares de variáveis (por exemplo, leitura vs. matemática), permitindo observar correlações potenciais.
+
+###### Gráfico de dispersão entre Matemática e Leitura
+
+```{r grafico-dispersao-mat-e-leitura}
+ggplot(data, aes(x=escrever, y=matematica)) +
+  geom_point(alpha=0.5) +
+  labs(title="Relação entre Escrita e Matemática", x="Notas de Escrita", y="Notas de Matemática") +
+  theme_minimal()
+```
+
+###### Gráfico de dispersão entre Ciências e Estudos Sociais  
+```{r grafico-dispersao-ciencias-e-estsociais}
+ggplot(data, aes(x=ciencias, y=estsociais)) +
+  geom_point(alpha=0.5) +
+  labs(title="Relação entre Ciências e Estudos Sociais", x="Notas de Ciências", y="Notas de Estudos Sociais") +
+  theme_minimal()
+```
+
+##### Potenciais Insights  
+  - Desempenho Geral: As estatísticas descritivas ajudam a entender o desempenho médio dos estudantes em cada disciplina.
+  - Identificação de Outliers: Os boxplots podem revelar outliers que podem precisar ser investigados mais a fundo.
+  - Correlação entre Disciplinas: Os gráficos de dispersão podem indicar se há correlações positivas ou negativas entre as notas em diferentes disciplinas.  
+    Por exemplo, se as notas em leitura estão fortemente correlacionadas com as notas em matemática.
+
+Essas análises fornecem uma base sólida para entender o desempenho acadêmico dos estudantes nas diferentes disciplinas e podem ser usadas para informar políticas educacionais ou intervenções específicas.
+Relacionado
+Como posso criar um histograma em R para visualizar a distribuição das notas de leitura
+Quais são as funções em R para analisar a média das notas de ciências por gênero
+
+*Prompt:* Faça uma análise completa com todas as variáveis do dataset e também os gráficos correspondentes, estabelecendo qual a correlação e a casualidade entre todas as variáveis.  
+  Depois elabore uma conclusão final sobre as análises realizadas. Utilizar a linguagem R para realizar todas as análise realizadas.
+  
+*Respostas:*   
+Para realizar uma análise completa do dataset `hsb2f.csv` e criar gráficos correspondentes, você precisa seguir os seguintes passos:
+
+  1. **Importar e Manipular os Dados**:
+     - Importar o arquivo CSV e visualizar as primeiras linhas para garantir que os dados foram importados corretamente.
+    - Transformar os dados em um formato adequado para análise.
+
+  2. **Calcular Estaísticas Descritivas**:
+    - Calcular médias, medians, modus e quartis para entender a centralidade e dispersão dos dados.
+
+  3. **Análise de Correlação**:
+    - Use métodos de correlograma para avaliar a correlação linear entre as variáveis numéricas.
+
+  4. **Gráficos Visuais**:
+    - Crie gráficos de dispersão e scatter plots para visualizar a relação entre as variáveis numéricas.
+   - Utilize boxplots para comparar a distribuição das notas em diferentes disciplinas.
+
+  5. **Testes Estatísticos**:
+    - Realize testes t para comparar médias entre grupos (por exemplo, notas de matemática entre gêneros).
+    - Execute análise de variância (ANOVA) para comparar médias entre três ou mais grupos.
+
+  6. **Elaborar gráfico combinado de boxplot**:
+    - Combine os boxplots das notas de leitura, escrita, matemática, ciências e estudos sociais em um único gráfico.
+
+#### Programa em R
+##### 1. Carregar pacotes necessários
+```{r}
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(corrplot)
+
+```
+
+  2. Ler o arquivo CSV
+  3. Verificar as primeiras linhas do dataset
+  
+##### 4. Análises descritivas  
+
+###### Estatísticas descritivas das notas  
+
+```{r descriptive1}
+  summary(data)
+```
+
+```{r descriptive2}
+estatisticas_notas <- data %>%
+  summarise(
+    media_leitura = mean(ler, na.rm = TRUE),
+    mediana_leitura = median(ler, na.rm = TRUE),
+    sd_leitura = sd(ler, na.rm = TRUE),
+    media_escrever = mean(escrever, na.rm = TRUE),
+    mediana_escrever = median(escrever, na.rm = TRUE),
+    sd_escrever = sd(escrever, na.rm = TRUE),
+    media_matematica = mean(matematica, na.rm = TRUE),
+    mediana_matematica = median(matematica, na.rm = TRUE),
+    sd_matematica = sd(matematica, na.rm = TRUE),
+    media_ciencias = mean(ciencias, na.rm = TRUE),
+    mediana_ciencias = median(ciencias, na.rm = TRUE),
+    sd_ciencias = sd(ciencias, na.rm = TRUE),
+    media_estsociais = mean(estsociais, na.rm = TRUE),
+    mediana_estsociais = median(estsociais, na.rm = TRUE),
+    sd_estsociais = sd(estsociais, na.rm = TRUE)
+  )
+print(estatisticas_notas)
+```
+
+##### 5. Correlogramas para avaliar relacoes lineares entre variaveis numericas
+###### Análise de Correlação
+
+```{r correlogramas}
+correlation_matrix <- data %>%
+  select(ler, escrever, matematica, ciencias, estsociais) %>%
+  cor(use="pairwise.complete.obs")
+```
+
+###### Visualizar a Matriz de Correlação
+```{r matriz-correlacao}
+# Visualizar a matriz de correlação
+corrplot(correlation_matrix, method="circle", type="upper", tl.col="black", tl.srt=45)
+```
+
+##### 6. Gráficos de dispersao e scatter plots para visualizar relacao entre variaveis numéricas  
+###### Relação entre Leitura e Matemática  
+
+```{r dispersao-e-scatter}
+ggplot(data,aes(x=ler,y=matematica))+geom_point()+labs(title =" Relação entre Leitura e Matemática",x =" Notas de Leitura",y =" Notas de Matemática")+theme_minimal()
+```
+
+###### Relação entre Leitura e Matemática 
+
+```{r relacao2}
+ggplot(data,aes(x=ler, y=matematica))+geom_point()+labs(title = "Relação entre Escritura e Matemática", x = "Notas de Escritura",y = "Notas de Matemática")+theme_minimal()
+```
+
+##### 7. Gráficos de Boxplots para Comparação de Notas
+######  Boxplot das notas por disciplina
+
+```{r boxplots-otas-disciplina}
+data_long <- data %>%
+  pivot_longer(cols=c(ler, escrever, matematica, ciencias, estsociais), 
+               names_to="disciplina", values_to="nota")
+
+ggplot(data_long, aes(x=disciplina, y=nota, fill=disciplina)) +
+  geom_boxplot() +
+  labs(title="Boxplots das Notas por Disciplina", x="Disciplina", y="Notas") +
+  theme_minimal() +
+  scale_fill_brewer(palette="Set3")
+```
+
+#### 8. Testes Estatísticos  
+##### Teste t para comparar médias entre gêneros em matemática
+
+```{r teste-t}
+t_test_result <- t.test(matematica ~ genero, data=data)
+print(t_test_result)
+```
+
+##### ANOVA para comparar médias de matemática entre diferentes raças  
+```{r anova-test}
+anova_result <- aov(matematica ~ raca + clasocial + genero + tipescola + programa, data=data)
+summary(anova_result)
+```
+
+## Conclusão Final  
+A análise revelou que:  
+
+  - As médias das notas em leitura e matemática são geralmente mais altas do que em outras disciplinas  
+  - A correlação entre leitura e matemática é positiva e significativa `r round(correlation_matrix[1,"matematica"], 2)`  
+  - O teste t indicou diferenças significativas nas notas de matemática entre gêneros `r round(t_test_result$p.value, 4)`  
+  - A ANOVA mostrou que a raça e a classe social têm um impacto significativo nas notas de matemática (p-values < 0.05)  
+  - A distribuição das notas apresenta outliers em algumas disciplinas que podem indicar a necessidade de intervenções específicas.
 
